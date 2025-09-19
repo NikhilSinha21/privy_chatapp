@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "368967870861",
+    "project_id": "privy-96cd7",
+    "storage_bucket": "privy-96cd7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368967870861:android:4b1bd75a8da8438508f5c4",
+        "android_client_info": {
+          "package_name": "com.example.privy_chat_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEGR33a3LwoqnHx8jQP76H5xr6c7sUC_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
