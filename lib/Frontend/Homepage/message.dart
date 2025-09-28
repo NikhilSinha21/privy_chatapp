@@ -16,25 +16,21 @@ class _MessageState extends State<Message>{
     return Card(
 
       elevation: 8,
-      color: const Color.fromARGB(255, 32, 32, 32),
-      margin: const EdgeInsets.all(15),
+      color: messagecontainerColor,
+      margin: const EdgeInsets.only(top: 15,right: 30,left: 22),
       
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),      // no radius
+          topRight: Radius.circular(16),    // rounded
+          bottomLeft: Radius.circular(16),  // rounded
+          bottomRight: Radius.circular(16), // rounded).bottomLeft,
+      ),),
 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15),
-            child: const Text(TextNames.text,
-            style: AppTextStyle.username,),
-          ),
-
-          const Reaction(),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: const Text(TextNames.text,
+        style: AppTextStyle.message,),
       )
     );
   }
@@ -51,9 +47,9 @@ class UserAvatar extends StatefulWidget {
 class _UserAvatar extends State<UserAvatar>{
   @override
   Widget build(BuildContext context) {
-    return const  CircleAvatar(
+    return const CircleAvatar(
       radius: 29,
-      child: Icon(Icons.person),
+      backgroundImage: AssetImage("assets/images/user_logo.png"),
     );
   }
 
@@ -70,9 +66,12 @@ class UserName extends StatefulWidget {
 class _UserName extends State<UserName>{
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      TextNames.username,
-      style: AppTextStyle.username,
+    return Container(
+      padding: const EdgeInsets.only(top: 12),
+      child: const Text(
+        TextNames.username,
+        style: AppTextStyle.username,
+      ),
     );
   }
 
@@ -90,7 +89,7 @@ class _Time extends State<Time>{
   Widget build(BuildContext context) {
     return const Text(
       TextNames.time,
-      style: AppTextStyle.clickOn,
+      style: AppTextStyle.timedate,
     );
   }
 
@@ -107,7 +106,7 @@ class _Date extends State<Date>{
   Widget build(BuildContext context) {
     return const Text(
       TextNames.date,
-      style: AppTextStyle.clickOn,
+      style: AppTextStyle.timedate,
     );
   }
 
@@ -130,31 +129,26 @@ class _Reaction extends State<Reaction>{
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         
-        Card(
-
-      elevation: 8,
-      color: const Color.fromARGB(255, 71, 71, 71),
-      margin: const EdgeInsets.all(15),
-      
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
-      ),
-
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(TextNames.reaction,
-            style: AppTextStyle.reaction,),
-            SizedBox(width: 2,),
-            Text(TextNames.reactionno,
-            style: AppTextStyle.reaction,),
-          ],
+        Container(
+          
+          decoration: BoxDecoration(
+            color: rectioncolor,
+            borderRadius: BorderRadius.circular(50)
+          ),
+          padding: const EdgeInsets.all(10),
+          child: const Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            
+            children: [
+              Text(TextNames.reaction,
+              style: AppTextStyle.reaction,),
+              SizedBox(width: 5,),
+              Text(TextNames.reactionno,
+              style: AppTextStyle.reaction,),
+            ],
+          ),
         ),
-      )
-    ),
       ],
     );
   }
