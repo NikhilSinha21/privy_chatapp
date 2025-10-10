@@ -1,6 +1,8 @@
 
 // ignore_for_file: use_build_context_synchronously
 
+
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:privy_chat_chat_app/Backend/auth_service.dart';
@@ -19,9 +21,11 @@ class Registration extends StatefulWidget {
 class _RegistrationState extends State<Registration>{
   
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
+  final FocusNode nameFocus = FocusNode();
 final FocusNode passwordFocus = FocusNode();
 final FocusNode confirmpasswordFocus = FocusNode();
 
@@ -35,9 +39,9 @@ final FocusNode confirmpasswordFocus = FocusNode();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final confirmpassword = confirmPasswordController.text.trim();
+    final name = nameController.text.trim();
 
-
-    if(email.isEmpty|| password.isEmpty||confirmpassword.isEmpty){
+    if(email.isEmpty|| password.isEmpty||confirmpassword.isEmpty|| name.isEmpty){
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please Enter All The field")));
       return;
     }
@@ -48,6 +52,7 @@ final FocusNode confirmpasswordFocus = FocusNode();
       await authService.value.createAccount(
         email: email,
         password: password,
+        name:name,
       );
     
 
@@ -85,7 +90,6 @@ final FocusNode confirmpasswordFocus = FocusNode();
             children: [
               Container(
                      width: double.infinity,
-                     height: 460,
                      margin: const EdgeInsets.only(left: 15,right: 15),
                      decoration: BoxDecoration(
                      color:  containerColor,
@@ -108,12 +112,34 @@ final FocusNode confirmpasswordFocus = FocusNode();
                                      ),
                                      
                                      const SizedBox(height: 20),
+
+                                      // name input 
+                                        Container(
+                                           margin: const EdgeInsets.all(15) ,
+                                          child: TextField(
+                                          controller: nameController,
+                                          focusNode: nameFocus,
+                                          textInputAction: TextInputAction.next,
+                                          onSubmitted: (_) {
+                                                      FocusScope.of(context).requestFocus(passwordFocus);
+                                                    },
+                                          decoration: InputDecoration(
+                                           hintText: TextNames.name, //name
+                                           filled: true,
+                                           hintStyle:  AppTextStyle.hint,
+                                           border: OutlineInputBorder(
+                                                               borderRadius: BorderRadius.circular(15),
+                                                               borderSide: BorderSide.none,
+                                                               ),
+                                           )
+                                          ),
+                                        ),
+                                     
                                      
                                      Container(
                                        margin: const EdgeInsets.all(15) ,
-                                   
-                                   
-                                       // name input 
+                                      
+                                       // email input 
                                        child: TextField(
                                         controller: emailController,
                                         focusNode: emailFocus,
@@ -122,7 +148,7 @@ final FocusNode confirmpasswordFocus = FocusNode();
             FocusScope.of(context).requestFocus(passwordFocus);
           },
                                         decoration: InputDecoration(
-                                         hintText: TextNames.email, //name
+                                         hintText: TextNames.email, //email
                                          filled: true,
                                          hintStyle:  AppTextStyle.hint,
                                          border: OutlineInputBorder(

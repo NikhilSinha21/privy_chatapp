@@ -1,7 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:privy_chat_chat_app/Frontend/Homepage/backgroundforsetting.dart';
-import 'package:privy_chat_chat_app/Frontend/Profile/Userprofile/menu_glass.dart';
 import 'package:privy_chat_chat_app/Frontend/Things/app_text_style.dart';
+import 'package:privy_chat_chat_app/Frontend/Things/color.dart';
 import 'package:privy_chat_chat_app/Frontend/Things/text_names.dart';
 
 
@@ -13,7 +15,14 @@ class UserProfile extends StatefulWidget{
 }
 
 class _UserProfileState extends State<UserProfile> {
- 
+  bool _isMenuOpen = false;
+  void toggleMenu() {
+    setState(() => _isMenuOpen = !_isMenuOpen);
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +62,15 @@ class _UserProfileState extends State<UserProfile> {
                 ),
               ),
               
-            Expanded(
+            const Expanded(
               child: SingleChildScrollView(
-                  padding:  const EdgeInsets.only(left: 10,right: 10,top:10),
+                  padding:  EdgeInsets.only(left: 10,right: 10,top:10),
                   child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   const SizedBox(height: 50,),
-                    const Row(
+                   SizedBox(height: 50,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         
@@ -81,13 +90,75 @@ class _UserProfileState extends State<UserProfile> {
                            
                             ]),
                             Spacer(),
-                             
-                             MenuGlass(),
-                             
+                             /*
+                             Stack(
+    clipBehavior: Clip.none,
+    children: [
+      GestureDetector(
+                       onTap: toggleMenu,
+                      child: Image.asset("assets/images/Threedot.png",height: 24, width: 24,  )
+                      ),
+      if(_isMenuOpen)
+       Positioned(
+  top: -15,
+  right: 25,
+  child: ClipRRect(
+    clipBehavior: Clip.none,
+    borderRadius: BorderRadius.circular(12),
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+      child: Container(
+        width: 180,
+        padding: const EdgeInsets.all(10), // add padding for spacing
+        decoration: BoxDecoration(
+          color: glass,
+          borderRadius: BorderRadius.circular(12),
+          
+          border: Border.all(
+            width: 1,
+            color: const Color.fromARGB(255, 188, 188, 188),
+          ) // optional rounded corners
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+             const Text(TextNames.changeusername , style: AppTextStyle.PopupMenuItem,),
+             const SizedBox(height: 10,),
+             const Text(TextNames.changeProfilePic , style: AppTextStyle.PopupMenuItem,),
+
+             const SizedBox(height: 10,),
+             IgnorePointer(
+              ignoring: false,
+               child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isMenuOpen = false; 
+                  });
+                  print("pressed");
+                  
+                },
+                behavior: HitTestBehavior.opaque, 
+                child: Text(TextNames.logout, style: AppTextStyle.PopupMenuItem)),
+             ),
+          ],
+        ),
+      ),
+    ),
+  ),
+),
+
+    
+
+                                
+    ],
+  ),
+         */                    
                      SizedBox(width: 12,),  
                    ],
                    
                     ),
+                    /*
                     const SizedBox(height: 35,),
                     Container(
                       height: 0.4,
@@ -103,7 +174,7 @@ class _UserProfileState extends State<UserProfile> {
                     const Text(TextNames.fontchange,style: AppTextStyle.clickOn),
                     const SizedBox(height: 10,),
                     const Text(TextNames.textcolorchange,style: AppTextStyle.clickOn),
-                  ],
+                 */ ],
                   ),
                 ),
             ),

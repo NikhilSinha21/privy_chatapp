@@ -10,6 +10,7 @@ static const String creater = " by Nikhil Sinha";
 static const String login = "Login";
 static const String register = "Register";
 static const String email = "Email";
+static const String name = "Name";
 static const String password = "Password";
 static const String  confirmpassword ="Confirm Password";
 
@@ -32,6 +33,7 @@ static const String fontchange = "Change Font Style";
 static const String textcolorchange = "Change Text color";
 static const String changeusername = "Change your name";
 static const String changeProfilePic = "Change Profile Photo";
+static const String logout = "LOG OUT";
 
 // demo
 

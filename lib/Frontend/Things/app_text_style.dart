@@ -73,11 +73,14 @@ class AppTextStyle {
               );  
 
      static const TextStyle PopupMenuItem =  TextStyle(
-                color: Color.fromARGB(255, 222, 222, 222),
+                color: Color.fromARGB(255, 255, 255, 255),
                 //fontSize: 24,
                 fontWeight:FontWeight.bold,
                 fontSize: 15,
-              );                     
+              );    
+
+
+                                
 
   static const TextStyle reaction = TextStyle(
                      fontSize: 9,

@@ -1,16 +1,22 @@
 
+import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:privy_chat_chat_app/Frontend/Things/app_text_style.dart';
 import 'package:privy_chat_chat_app/Frontend/Things/color.dart';
 import 'package:privy_chat_chat_app/Frontend/Things/text_names.dart';
 
 class Message extends StatefulWidget {
-  const Message({super.key,});
+  final String text; // add this
+  const Message({super.key, required this.text});
   @override
   State<Message> createState() => _MessageState();
 }
 
 class _MessageState extends State<Message>{
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -29,7 +35,7 @@ class _MessageState extends State<Message>{
 
       child: Container(
         padding: const EdgeInsets.all(15),
-        child: const Text(TextNames.text,
+        child:  Text(widget.text,
         style: AppTextStyle.message,),
       )
     );
@@ -58,7 +64,8 @@ class _UserAvatar extends State<UserAvatar>{
 
 
 class UserName extends StatefulWidget {
-  const UserName({super.key,});
+  final String username ;
+  const UserName({super.key,required this.username});
   @override
   State<UserName> createState() => _UserName();
 }
@@ -68,8 +75,8 @@ class _UserName extends State<UserName>{
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 12),
-      child: const Text(
-        TextNames.username,
+      child: Text(
+        widget.username,
         style: AppTextStyle.username,
       ),
     );
@@ -79,7 +86,8 @@ class _UserName extends State<UserName>{
 
 
 class Time extends StatefulWidget {
-  const Time({super.key,});
+  final Timestamp time;
+  const Time({super.key,required this.time});
   @override
   State<Time> createState() => _Time();
 }
@@ -87,8 +95,12 @@ class Time extends StatefulWidget {
 class _Time extends State<Time>{
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      TextNames.time,
+    final dateTime = widget.time.toDate(); // convert Firestore Timestamp to DateTime
+    final formattedTime = DateFormat('hh:mm a').format(dateTime); // e.g., 02:30 PM
+
+
+    return  Text(
+      formattedTime,
       style: AppTextStyle.timedate,
     );
   }
@@ -115,44 +127,84 @@ class _Date extends State<Date>{
 
 
 
-class Reaction extends StatefulWidget {
-  const Reaction({super.key,});
-  @override
-  State<Reaction> createState() => _Reaction();
-}
 
-class _Reaction extends State<Reaction>{
+
+// Assuming you have imported TextNames, AppTextStyle, and rectioncolor from 'privy_chat_chat_app/Frontend/Things/...'
+
+class Reaction extends StatelessWidget {
+  // Correct Parameter: This must match the name used in StreamBuilder (reactionCounts: reactionCounts)
+  final Map<String, int> reactionCounts;
+
+  const Reaction({
+    super.key,
+    required this.reactionCounts,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        
-        Container(
+    if (reactionCounts.isEmpty) {
+      return const SizedBox.shrink(); // Hide the widget if there are no reactions
+    }
+
+    // 1. Prepare data: Sort reactions by count (descending) and filter out zero counts
+    final reactionsToDisplay = reactionCounts.entries
+        .where((e) => e.value > 0)
+        .toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+
+    // 2. Build the UI: Use a single container to hold all reactions
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+        child: Container(
+          // The overall layout container to give the reaction bubble a background
           
           decoration: BoxDecoration(
-            color: rectioncolor,
-            borderRadius: BorderRadius.circular(50)
+            // Assuming rectioncolor is defined and imported
+            // Use a lighter color like Colors.white or an imported color
+            color: glass, 
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+                width: 1,
+                color: const Color.fromARGB(255, 188, 188, 188),
+              ) 
+            //////////////////////////////////////////////////////////////////////////////////
           ),
-          padding: const EdgeInsets.all(10),
-          child: const Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             
-            children: [
-              Text(TextNames.reaction,
-              style: AppTextStyle.reaction,),
-              SizedBox(width: 5,),
-              Text(TextNames.reactionno,
-              style: AppTextStyle.reaction,),
-            ],
+            // 3. Map the reaction entries to a list of widgets
+            children: reactionsToDisplay.map((entry) {
+              // A Row for each unique reaction type (Emoji + Count)
+              return Padding(
+                padding: const EdgeInsets.only(right: 6.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Display the Emoji
+                    Text(
+                      entry.key, // The emoji string
+                      // Assuming AppTextStyle.reaction is defined and imported
+                      style: const TextStyle(fontSize: 18), 
+                    ),
+                    const SizedBox(width: 3),
+                    // Display the Count
+                    Text(
+                      entry.value.toString(), // The count (e.g., '5')
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
-      ],
+      ),
     );
   }
-
 }
 
 

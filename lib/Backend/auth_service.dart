@@ -25,13 +25,14 @@ User? get currentUser => firebaseAuth.currentUser;
    
    required String email,
    required String password,
+   required String name,
   })async{
     UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
 
     //Storing UserData in Database
     await FirebaseFirestore.instance.collection("users").doc(userCredential.user!.uid).set({
-
+      "name":name,
       "email":email,
       "createdAt": FieldValue.serverTimestamp(),
     });
