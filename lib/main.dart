@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:privy_chat_chat_app/Frontend/Authentication/loadingpage.dart';
 import 'package:privy_chat_chat_app/Frontend/Profile/Userprofile/user_profile.dart';
 import 'package:privy_chat_chat_app/Frontend/Authentication/login.dart';
 import 'package:privy_chat_chat_app/Frontend/Authentication/registration.dart';
@@ -26,10 +27,10 @@ class MyApp extends StatelessWidget {
       title: "Privy",
       debugShowCheckedModeBanner: false,
 
-      initialRoute: '/',
+      initialRoute: '/loading',
       routes:  {
-       // '/' : (context) =>  Background(),
-        '/' : (context) => const Login(),
+        '/loading' : (context) =>  Loadingpage(),
+         '/' : (context) => const Login(),
          '/register' : (context) =>const Registration(),
           '/homepage' : (context) => const Homepage(),
           '/userprofile':(context) => const UserProfile(),

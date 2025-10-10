@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:privy_chat_chat_app/AppName/app_name.dart';
 import 'package:privy_chat_chat_app/Backend/auth_service.dart';
 import 'package:privy_chat_chat_app/Backend/post_service.dart';
 import 'package:privy_chat_chat_app/Frontend/Homepage/background.dart';
@@ -83,10 +84,7 @@ class _HomepageState extends State<Homepage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          TextNames.appname,
-                          style: AppTextStyle.appname,
-                        ),
+                        AppName.appname,
                         const Spacer(),
                         GestureDetector(
                           onTap: () {

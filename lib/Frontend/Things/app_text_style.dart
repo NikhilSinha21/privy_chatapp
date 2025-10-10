@@ -59,6 +59,13 @@ class AppTextStyle {
                 fontWeight:FontWeight.bold,
               ); 
 
+   static const TextStyle Delete =  TextStyle(
+                color: Color.fromARGB(255, 255, 0, 0),
+                fontSize: 20,
+                fontWeight:FontWeight.bold,
+              ); 
+           
+
     static const TextStyle settingusername =  TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 23,
@@ -85,6 +92,23 @@ class AppTextStyle {
   static const TextStyle reaction = TextStyle(
                      fontSize: 9,
                      color: Colors.white,
-                     );                                
+                     );  
+
+   
+   // don't know if it will look good or not
+   static const TextStyle appnamedemo1 = TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 34,
+                  fontFamily: 'IrishGrover',
+                );
+
+   static const TextStyle appnamedemo2 = TextStyle(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 34,
+                  fontFamily: 'IrishGrover',
+                );                                                               
 }
 
+
+
+ 

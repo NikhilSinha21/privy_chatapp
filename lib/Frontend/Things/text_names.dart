@@ -40,4 +40,12 @@ static const String logout = "LOG OUT";
 static const String  text = "Amazon.com, Inc. is a multinational technology company known for its vast e-commerce platform and a wide ";
 static const String reaction = "❤️ 😂"; 
 static const String reactionno = "250"; 
+
+
+
+
+// App name dont know if it will work 
+
+static const String appnamedemo1= "Priv";
+static const String appnamedemo2 = "y";
 }

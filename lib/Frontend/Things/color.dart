@@ -19,3 +19,5 @@ const LinearGradient myGradient = LinearGradient(
   begin: Alignment.topRight,
   end: Alignment.bottomLeft,
 );
+
+
