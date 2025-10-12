@@ -60,7 +60,14 @@ class AppTextStyle {
                 color: Color.fromARGB(255, 255, 255, 255),
                 //fontSize: 16
                 fontSize: 16,
-              ); 
+              );
+
+
+    static const TextStyle Iconnames =  TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                //fontSize: 16
+                fontSize: 12,
+              );           
 
 
     static const TextStyle appname = TextStyle(

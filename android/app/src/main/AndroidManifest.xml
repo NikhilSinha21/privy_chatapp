@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="privy_chat_chat_app"
+        android:label="Privy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -41,5 +41,18 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
+
+         <!-- New one: for sharing files, images, etc. -->
+    <intent>
+        <action android:name="android.intent.action.SEND" />
+        <data android:mimeType="*/*" />
+    </intent>
+
+    <!-- Optional: For viewing multiple items (like image galleries) -->
+    <intent>
+        <action android:name="android.intent.action.SEND_MULTIPLE" />
+        <data android:mimeType="*/*" />
+    </intent>
+
     </queries>
 </manifest>

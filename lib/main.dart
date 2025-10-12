@@ -4,8 +4,6 @@ import 'package:Privy/Frontend/Profile/Userprofile/user_profile.dart';
 import 'package:Privy/Frontend/Authentication/login.dart';
 import 'package:Privy/Frontend/Authentication/registration.dart';
 import 'package:Privy/Frontend/Homepage/homepage.dart';
-
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 

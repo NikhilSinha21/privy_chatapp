@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Privy/AppName/app_name.dart';
@@ -11,7 +9,7 @@ import 'package:Privy/Frontend/Homepage/message.dart';
 import 'package:Privy/Frontend/Things/app_text_style.dart';
 import 'package:Privy/Frontend/Things/color.dart';
 import 'package:Privy/Frontend/Things/text_names.dart';
-
+import 'package:share_plus/share_plus.dart';
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
@@ -78,8 +76,8 @@ class _HomepageState extends State<Homepage> {
       ),
       builder: (_) {
         return Container(
-          height: 200,
-          width: double.infinity,
+          height: 250,
+          
           decoration: const BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -106,66 +104,92 @@ class _HomepageState extends State<Homepage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // COPY BUTTON 
-                    GestureDetector(
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: textToCopy));
-                        Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Copied to clipboard"),
-                            duration: Duration(seconds: 1),
-                          ),
-                        );
-                      },
-                      child: CopyLogo(),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: textToCopy));
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Copied to clipboard"),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
+                          },
+                          child: CopyLogo(),
+                        ),
+                        const SizedBox(height: 5,),
+                        const Text("Copy",style: AppTextStyle.Iconnames)
+                      ],
                     ),
 
                     // DELETE BUTTON 
                     if (currentUid == postUid)
-                      GestureDetector(
-                        onTap: () async {
-                          Navigator.pop(context);
-                          final confirm = await showDialog<bool>(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: messagecontainerColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                title: const Text(
-                                  "Delete message?",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                content: const Text(
-                                  "Are you sure you want to delete this message?",
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, false),
-                                    child: const Text("Cancel", style: TextStyle(color: Colors.white70)),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context, true),
-                                    child: const Text("Delete", style: TextStyle(color: Colors.redAccent)),
-                                  ),
-                                ],
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.pop(context);
+                              final confirm = await showDialog<bool>(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: messagecontainerColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    title: const Text(
+                                      "Delete message?",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    content: const Text(
+                                      "Are you sure you want to delete this message?",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, false),
+                                        child: const Text("Cancel", style: TextStyle(color: Colors.white70)),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context, true),
+                                        child: const Text("Delete", style: TextStyle(color: Colors.redAccent)),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
+                          
+                              if (confirm == true) {
+                                await _postService.deletePost(postId);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Message deleted"),
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                              }
                             },
-                          );
+                            child: const DeleteLogo(),
+                          ),
+                          const SizedBox(height: 5,),
+                          const Text("Delete",style: AppTextStyle.Iconnames,)
+                        ],
+                      ),
 
-                          if (confirm == true) {
-                            await _postService.deletePost(postId);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Message deleted"),
-                                duration: Duration(seconds: 1),
-                              ),
-                            );
-                          }
-                        },
-                        child: deleteLogo(),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context); // close current bottom sheet first
+                              //Sharemessage.show(context);
+                              Share.share(textToCopy);
+                            },
+                            child: const ShareLogo()),
+                          const SizedBox(height: 5,)
+,                          const Text("Share",style: AppTextStyle.Iconnames,)
+                        ],
                       ),
                   ],
                 ),
@@ -173,7 +197,9 @@ class _HomepageState extends State<Homepage> {
                 const SizedBox(height: 10),
                 const Divider(color: messagecontainerColor),
                 const SizedBox(height: 10),
-                Text("Report", style: AppTextStyle.report),
+                const Text("Edit", style: AppTextStyle.report),
+                const SizedBox(height: 10),
+                const Text("Report", style: AppTextStyle.report),
               ],
             ),
           ),
@@ -245,7 +271,7 @@ class _HomepageState extends State<Homepage> {
 
 
                             return Container(
-                              margin: EdgeInsets.only(bottom: 15,top: 15,left: 20,right: 20),
+                              margin: const EdgeInsets.only(bottom: 15,top: 15,left: 20,right: 20),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,6 +300,7 @@ class _HomepageState extends State<Homepage> {
                                       GestureDetector(
                                         onTap: () {
                                           threedot(text,postId,postUid);
+                                          
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.only(
@@ -376,7 +403,7 @@ class _HomepageState extends State<Homepage> {
                         maxLines: 2,
                         keyboardType: TextInputType.multiline,
                         controller: messageText,
-                        style: TextStyle(color: textcolor),
+                        style: const TextStyle(color: textcolor),
                         decoration: InputDecoration(
                           
                           hintText: TextNames.messagehint,
