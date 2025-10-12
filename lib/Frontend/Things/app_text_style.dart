@@ -51,10 +51,15 @@ class AppTextStyle {
 
     static const TextStyle report =  TextStyle(
                 color: Color.fromARGB(255, 232, 0, 0),
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight:FontWeight.bold,
               );
               
+    static const TextStyle edit =  TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 16,
+                fontWeight:FontWeight.bold,
+              );          
     
     static const TextStyle message =  TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
@@ -139,7 +144,7 @@ class AppTextStyle {
                 );
 
    static const TextStyle appnamedemo2 = TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Color.fromRGBO(255, 255, 255, 1),
                   fontSize: 26,
                   fontFamily: 'IrishGrover',
                 );                                                               

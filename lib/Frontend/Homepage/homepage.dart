@@ -1,3 +1,4 @@
+import 'package:Privy/Frontend/Homepage/edittextmessage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Privy/AppName/app_name.dart';
@@ -73,11 +74,12 @@ class _HomepageState extends State<Homepage> {
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+
       ),
       builder: (_) {
         return Container(
           height: 250,
-          
+          padding: const EdgeInsets.only(left: 10,right: 10),
           decoration: const BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -117,7 +119,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                             );
                           },
-                          child: CopyLogo(),
+                          child: const CopyLogo(),
                         ),
                         const SizedBox(height: 5,),
                         const Text("Copy",style: AppTextStyle.Iconnames)
@@ -197,7 +199,13 @@ class _HomepageState extends State<Homepage> {
                 const SizedBox(height: 10),
                 const Divider(color: messagecontainerColor),
                 const SizedBox(height: 10),
-                const Text("Edit", style: AppTextStyle.report),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    final currentUid = authService.value.currentUser?.uid;
+                    Edittextmessage(context, postId, textToCopy, postUid, currentUid ?? "");
+                  },
+                  child: const Text("Edit", style: AppTextStyle.edit)),
                 const SizedBox(height: 10),
                 const Text("Report", style: AppTextStyle.report),
               ],
@@ -391,7 +399,7 @@ class _HomepageState extends State<Homepage> {
                     }),
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 2, top: 10),
+                margin: const EdgeInsets.only(bottom: 3, top: 3),
                 child: Row(
                   children: [
                     const SizedBox(
@@ -414,8 +422,8 @@ class _HomepageState extends State<Homepage> {
                             borderRadius: BorderRadius.circular(50),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
+                          contentPadding: const EdgeInsets.only(
+                              left: 25,right: 25,bottom: 9),
                         ),
                       ),
                     ),

@@ -46,6 +46,6 @@ static const String reactionno = "250";
 
 // App name dont know if it will work 
 
-static const String appnamedemo1= "Priv";
-static const String appnamedemo2 = "y";
+static const String appnamedemo1= "Pri";
+static const String appnamedemo2 = "vy";
 }
