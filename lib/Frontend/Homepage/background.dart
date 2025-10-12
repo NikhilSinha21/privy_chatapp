@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:privy_chat_chat_app/Frontend/Things/color.dart';
+import 'package:Privy/Frontend/Things/color.dart';
 
 class Background extends StatelessWidget{
   const Background({super.key});
@@ -54,3 +54,4 @@ class Background extends StatelessWidget{
       return true;
     }
   }
+  

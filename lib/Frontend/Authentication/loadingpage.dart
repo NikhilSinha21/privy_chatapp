@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:privy_chat_chat_app/AppName/app_name.dart';
+import 'package:Privy/AppName/app_name.dart';
 
 class Loadingpage extends StatefulWidget {
   const Loadingpage({super.key});

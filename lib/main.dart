@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:privy_chat_chat_app/Frontend/Authentication/loadingpage.dart';
-import 'package:privy_chat_chat_app/Frontend/Profile/Userprofile/user_profile.dart';
-import 'package:privy_chat_chat_app/Frontend/Authentication/login.dart';
-import 'package:privy_chat_chat_app/Frontend/Authentication/registration.dart';
-import 'package:privy_chat_chat_app/Frontend/Homepage/homepage.dart';
+import 'package:Privy/Frontend/Authentication/loadingpage.dart';
+import 'package:Privy/Frontend/Profile/Userprofile/user_profile.dart';
+import 'package:Privy/Frontend/Authentication/login.dart';
+import 'package:Privy/Frontend/Authentication/registration.dart';
+import 'package:Privy/Frontend/Homepage/homepage.dart';
 
 
 import 'package:firebase_core/firebase_core.dart';

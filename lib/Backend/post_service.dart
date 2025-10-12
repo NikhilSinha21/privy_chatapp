@@ -51,4 +51,9 @@ else {
 Stream<QuerySnapshot> getreaction (String postId){
   return _firestore.collection("reaction").where("postId", isEqualTo: postId).snapshots();
 }
+
+Future<void> deletePost(String postId) async {
+  await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
+}
+
 }

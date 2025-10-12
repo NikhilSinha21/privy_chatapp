@@ -22,8 +22,8 @@ class AppTextStyle {
                      );
 
     static const TextStyle timedate = TextStyle(
-                     fontSize: 12,
-                     color: Colors.white,
+                     fontSize: 10,
+                     color: Color.fromARGB(255, 186, 186, 186),
                      );                  
 
     static const TextStyle link = TextStyle(
@@ -41,11 +41,35 @@ class AppTextStyle {
 
     // HomePage
 
+
+    static const TextStyle sendersname =  TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 13,
+                fontWeight:FontWeight.bold,
+              );
+
+
+    static const TextStyle report =  TextStyle(
+                color: Color.fromARGB(255, 232, 0, 0),
+                fontSize: 18,
+                fontWeight:FontWeight.bold,
+              );
+              
+    
+    static const TextStyle message =  TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                //fontSize: 16
+                fontSize: 16,
+              ); 
+
+
     static const TextStyle appname = TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 34,
                 fontFamily: 'IrishGrover',
-              );  
+              ); 
+
+
     static const TextStyle setting = TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 34,
@@ -55,9 +79,12 @@ class AppTextStyle {
 
    static const TextStyle username =  TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 20,
+                fontSize: 23,
                 fontWeight:FontWeight.bold,
               ); 
+
+   
+
 
    static const TextStyle Delete =  TextStyle(
                 color: Color.fromARGB(255, 255, 0, 0),
@@ -72,13 +99,7 @@ class AppTextStyle {
                 fontWeight:FontWeight.bold,
               );            
 
-   static const TextStyle message =  TextStyle(
-                color: textcolor,
-                //fontSize: 24,
-                
-                fontSize: 18,
-              );  
-
+  
      static const TextStyle PopupMenuItem =  TextStyle(
                 color: Color.fromARGB(255, 255, 255, 255),
                 //fontSize: 24,
@@ -90,21 +111,29 @@ class AppTextStyle {
                                 
 
   static const TextStyle reaction = TextStyle(
-                     fontSize: 9,
+                     fontSize: 10,
                      color: Colors.white,
                      );  
 
-   
+  static const TextStyle reactiontext = TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255));
+
+
+
+
+
    // don't know if it will look good or not
    static const TextStyle appnamedemo1 = TextStyle(
                   color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 34,
+                  fontSize: 26,
                   fontFamily: 'IrishGrover',
                 );
 
    static const TextStyle appnamedemo2 = TextStyle(
                   color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 34,
+                  fontSize: 26,
                   fontFamily: 'IrishGrover',
                 );                                                               
 }

@@ -5,10 +5,10 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:privy_chat_chat_app/Backend/auth_service.dart';
-import 'package:privy_chat_chat_app/Frontend/Things/app_text_style.dart';
-import 'package:privy_chat_chat_app/Frontend/Things/color.dart';
-import 'package:privy_chat_chat_app/Frontend/Things/text_names.dart';
+import 'package:Privy/Backend/auth_service.dart';
+import 'package:Privy/Frontend/Things/app_text_style.dart';
+import 'package:Privy/Frontend/Things/color.dart';
+import 'package:Privy/Frontend/Things/text_names.dart';
 
 
 class Registration extends StatefulWidget {
