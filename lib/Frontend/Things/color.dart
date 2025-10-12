@@ -11,6 +11,7 @@ const Color glass = Color.fromRGBO(255, 255, 255, 0.1);
 const Color menuTextbgcolor = Color.fromARGB(78, 0, 0, 0) ;
 const Color rectioncolor = Color.fromRGBO(43, 43, 43, 1);
 const Color appbarcolor = Color.fromRGBO(20, 20, 20, 1);
+const Color deletecolor = Color.fromRGBO(255, 0, 0, 1);
 const LinearGradient myGradient = LinearGradient(
   colors: [
     

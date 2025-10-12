@@ -101,7 +101,7 @@ class AppTextStyle {
    static const TextStyle Delete =  TextStyle(
                 color: Color.fromARGB(255, 255, 0, 0),
                 fontSize: 20,
-                fontWeight:FontWeight.bold,
+                fontWeight:FontWeight.bold
               ); 
            
 
@@ -147,7 +147,11 @@ class AppTextStyle {
                   color: Color.fromRGBO(255, 255, 255, 1),
                   fontSize: 26,
                   fontFamily: 'IrishGrover',
-                );                                                               
+                );   
+
+
+                
+                                                                            
 }
 
 
