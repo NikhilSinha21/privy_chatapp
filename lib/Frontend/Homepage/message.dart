@@ -68,7 +68,7 @@ class UserAvatarforgoingtosetting extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return const CircleAvatar(
-      radius: 22,
+      radius: 35,
       backgroundImage: AssetImage("assets/images/user_logo.png"),
     );
   }

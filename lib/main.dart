@@ -1,3 +1,4 @@
+import 'package:Privy/Frontend/Profile/Userprofile/userprofiledataupdate.dart';
 import 'package:flutter/material.dart';
 import 'package:Privy/Frontend/Authentication/loadingpage.dart';
 import 'package:Privy/Frontend/Profile/Userprofile/user_profile.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
          '/register' : (context) =>const Registration(),
           '/homepage' : (context) => const Homepage(),
           '/userprofile':(context) => const UserProfile(),
+          '/userprofileupdataupdate' : (context) =>  const UserProfileDataUpdate()
       },
     );
   }

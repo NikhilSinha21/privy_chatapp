@@ -56,4 +56,20 @@ Future<void> deletePost(String postId) async {
   await FirebaseFirestore.instance.collection('posts').doc(postId).delete();
 }
 
+
+
+  /// Returns the current user's bio from Firestore
+  Future<String?> get bio async {
+    final userId = _auth.currentUser?.uid;
+    if (userId == null) return null;
+
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      return doc.data()?['bio'] as String?;
+    } catch (e) {
+      return null;
+    }
+  }
+
+
 }
