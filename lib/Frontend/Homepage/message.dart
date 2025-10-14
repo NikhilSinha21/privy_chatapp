@@ -1,46 +1,163 @@
-
-
+import 'package:Privy/Frontend/Profile/Userprofile/settingbuttons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Privy/Frontend/Things/app_text_style.dart';
 import 'package:Privy/Frontend/Things/color.dart';
-import 'package:Privy/Frontend/Things/text_names.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Message extends StatefulWidget {
-  final String text; // add this
+
+
+
+class Message extends StatelessWidget {
+  final String text;
   const Message({super.key, required this.text});
-  @override
-  State<Message> createState() => _MessageState();
-}
 
-class _MessageState extends State<Message>{
+  Future<Metadata?> _fetchMeta(String text) async {
+    final reg = RegExp(r'(https?:\/\/[^\s]+)');
+    final url = reg.firstMatch(text)?.group(0);
+    if (url == null) return null;
+    try {
+      return await MetadataFetch.extract(url);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> _onOpen(LinkableElement link) async {
+    final uri = Uri.parse(link.url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-
-      elevation: 8,
       color: messagecontainerColor,
-      margin: const EdgeInsets.only(top: 9,right: 25,left: 37,),
-      
+      elevation: 6,
+      margin: const EdgeInsets.only(top: 9, right: 25, left: 37),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(0),      // no radius
-          topRight: Radius.circular(16),    // rounded
-          bottomLeft: Radius.circular(16),  // rounded
-          bottomRight: Radius.circular(16), // rounded).bottomLeft,
-      ),),
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(16),
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 15,left: 10,right: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            
+            
+            FutureBuilder<Metadata?>(
+              future: _fetchMeta(text),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return const SizedBox.shrink();
+                }
+                final data = snapshot.data!;
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: _previewCard(context, data),
+                );
+              },
+            ),
+            SizedBox(height: 10,),
+            Linkify(
+              text: text,
+              onOpen: _onOpen,
+              style: AppTextStyle.message,
+              linkStyle: const TextStyle(
+                color: Colors.blueAccent,
+                decoration: TextDecoration.underline,
+              ),
+            ),
 
-      child: Container(
-        padding: const EdgeInsets.only(top: 10,left: 10,right: 10,bottom: 20),
-        child:  Text(widget.text,
-        style: AppTextStyle.message,),
-      )
+          ],
+        ),
+      ),
     );
   }
 
+  Widget _previewCard(BuildContext ctx, Metadata data) {
+    return GestureDetector(
+      onTap: () async {
+        final url = data.url ?? '';
+        if (await canLaunchUrl(Uri.parse(url))) {
+          await launchUrl(Uri.parse(url),
+              mode: LaunchMode.externalApplication);
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(ctx).size.width * 0.65,
+        decoration: BoxDecoration(
+          color: Colors.black26.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (data.image != null)
+              ClipRRect(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
+                child: Image.network(
+                  data.image!,
+                  width: double.infinity,
+                  height: 140,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (data.title != null)
+                    Text(
+                      data.title!,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (data.description != null)
+                    Text(
+                      data.description!,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 12,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  if (data.url != null)
+                    Text(
+                      Uri.parse(data.url!).host,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 10,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+
+
 
 
 class UserAvatar extends StatefulWidget {
@@ -121,7 +238,8 @@ class _Time extends State<Time>{
 }
 
 class Date extends StatefulWidget {
-  const Date({super.key,});
+  final Timestamp date;
+  const Date({super.key,required this.date} );
   @override
   State<Date> createState() => _Date();
 }
@@ -129,10 +247,12 @@ class Date extends StatefulWidget {
 class _Date extends State<Date>{
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      TextNames.date,
-      style: AppTextStyle.timedate,
-    );
+    final date = widget.date.toDate();
+    final formateddate = DateFormat('dd-MM-yyyy').format(date);
+
+
+    
+    return Settingbuttons.textsupportcolor(formateddate,10,Colors.white,FontWeight.w400);
   }
 
 }

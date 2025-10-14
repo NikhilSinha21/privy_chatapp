@@ -91,7 +91,7 @@ class _UserProfileState extends State<UserProfile> {
                                           Colors.white,
                                           FontWeight.bold),
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width *0.6,
+                                        width: 200,
                                         child: Settingbuttons.textsupportcolor(
                                             bioText,
                                             12,
@@ -123,19 +123,7 @@ class _UserProfileState extends State<UserProfile> {
                                         Navigator.pushNamed(context,'/userprofileupdataupdate');
                                       },
                                       child: Settingbuttons.text("Profile Update", 18)),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 10, top: 12, bottom: 15),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Settingbuttons.text("Change Profile Pic", 16),
-                                        const SizedBox(height: 8),
-                                        Settingbuttons.text("Change Name", 16),
-                                        const SizedBox(height: 8),
-                                        Settingbuttons.text("Change Password", 16),
-                                      ],
-                                    ),
-                                  ),
+                                 const SizedBox(height: 15),
                                   GestureDetector(
                                       onTap: (){
                                         
