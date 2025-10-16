@@ -1,4 +1,6 @@
 import 'package:Privy/Backend/homepage_backend.dart';
+import 'package:Privy/Backend/presence_server.dart';
+import 'package:Privy/Frontend/Homepage/logos.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Privy/AppName/app_name.dart';
@@ -53,7 +55,7 @@ class _HomepageState extends State<Homepage> {
                       onTap: () {
                         Navigator.pushNamed(context, '/userprofile');
                       },
-                      child: const UserAvatar(),
+                      child: const UserAvatar(radius: 16,),
                     )
                   ],
                 ),
@@ -158,7 +160,14 @@ class _HomepageState extends State<Homepage> {
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.only(top: 5, right: 10),
-                                        child: const UserAvatar(),
+                                        child:  StreamBuilder<bool>(
+                                                stream: PresenceServer().userOnlineStatus(postUid),
+                                                builder: (context, snapshot) {
+                                                  final isOnline = snapshot.data ?? false;
+                                                  return UserAvatar(isOnline: isOnline, radius: 16);
+                                                },
+                                                  ),
+
                                       ),
                                       Sendersname(sendersname: username),
                                     ],

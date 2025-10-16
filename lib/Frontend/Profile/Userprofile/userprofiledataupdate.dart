@@ -1,5 +1,6 @@
 import 'package:Privy/Backend/auth_service.dart';
 import 'package:Privy/Backend/changeuserprofiledata.dart';
+import 'package:Privy/Frontend/Homepage/logos.dart';
 import 'package:Privy/Frontend/Homepage/message.dart';
 import 'package:Privy/Frontend/Profile/Userprofile/settingbuttons.dart';
 import 'package:Privy/Frontend/Things/color.dart';
@@ -68,7 +69,7 @@ class _UserProfileDataUpdateState extends State<UserProfileDataUpdate> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Center(child: UserAvatarforgoingtosetting()),
+                    const Center(child: UserAvatar(radius: 35,)),
                     const SizedBox(height: 22),
                     Center(
                       child: Settingbuttons.textsupportcolor(

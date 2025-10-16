@@ -160,37 +160,9 @@ class Message extends StatelessWidget {
 
 
 
-class UserAvatar extends StatefulWidget {
-  const UserAvatar({super.key,});
-  @override
-  State<UserAvatar> createState() => _UserAvatar();
-}
-
-class _UserAvatar extends State<UserAvatar>{
-  @override
-  Widget build(BuildContext context) {
-    return const CircleAvatar(
-      radius: 18,
-      backgroundImage: AssetImage("assets/images/user_logo.png"),
-    );
-  }
-
-}
 
 
 
-class UserAvatarforgoingtosetting extends StatelessWidget{
-  const UserAvatarforgoingtosetting({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const CircleAvatar(
-      radius: 35,
-      backgroundImage: AssetImage("assets/images/user_logo.png"),
-    );
-  }
-
-}
 
 
 class Sendersname extends StatefulWidget {

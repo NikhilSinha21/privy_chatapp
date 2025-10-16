@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 const Color backgroundColor = Color.fromARGB(255, 16, 16, 16) ;
-const Color messagebackgroundColor = Color.fromRGBO(55, 55, 55, 1) ;
+const Color messagebackgroundColor = Color.fromRGBO(55, 55, 55,1);
 const Color containerColor = Color.fromRGBO(232, 232, 232, 1);
 const Color hintColor = Color.fromRGBO(171, 171, 171, 1);
-const Color messagecontainerColor = Color.fromRGBO(67, 67, 67, 1);
+const Color messagecontainerColor = Color.fromRGBO(67, 67, 67, 0.4);
 const Color textcolor = Color.fromARGB(255, 255, 255, 255);
 const Color glass = Color.fromRGBO(255, 255, 255, 0.1);
 const Color menuTextbgcolor = Color.fromARGB(78, 0, 0, 0) ;

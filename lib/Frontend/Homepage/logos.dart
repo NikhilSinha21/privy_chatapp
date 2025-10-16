@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:Privy/Frontend/Things/color.dart';
 
@@ -270,5 +272,95 @@ class ShareLogo extends StatelessWidget{
       ),
     ),
   );
+  }
+}
+
+
+
+class UserAvatar extends StatelessWidget {
+  final bool isOnline;
+  final double radius;
+
+  const UserAvatar({
+    super.key,
+    this.isOnline = false,
+    this.radius = 16,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        // Outer gradient border
+        Container(
+          padding: const EdgeInsets.all(1),
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+              colors: [Colors.purpleAccent, Colors.blueAccent],
+            ),
+          ),
+          child: CircleAvatar(
+            radius: radius,
+            backgroundColor: Colors.black,
+            child: radius == 16 ? Container(
+              height: 12,
+              width: 12,
+              color: Colors.transparent,
+              child: const Stack(
+                children: [
+                  Positioned(
+                    
+                    left: 2.9,
+                    child: CircleAvatar(radius: 3,)),
+
+                    Positioned(
+                    top: 8,
+                    child: CircleAvatar(radius: 6,))
+                ],
+              )
+              
+              ):Container(
+              height: 26,
+              width: 26,
+              color: Colors.transparent,
+              child: const Stack(
+                children: [
+                  Positioned(
+                    
+                    left: 6.5,
+                    child: CircleAvatar(radius: 6,)),
+
+                    Positioned(
+                    top: 17,
+                    child: CircleAvatar(radius: 13,))
+                ],
+              )
+              
+              ),
+          ),
+        ),
+
+        // Online indicator
+        if (isOnline)
+          Positioned(
+            right: 2,
+            bottom: 2,
+            child: Container(
+              width: radius * 0.35,
+              height: radius * 0.35,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 0, 255, 17),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color:  const Color.fromARGB(255, 0, 255, 17),
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
