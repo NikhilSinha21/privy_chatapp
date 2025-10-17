@@ -23,7 +23,10 @@ class _HomepageState extends State<Homepage> {
   final ScrollController _scrollController = ScrollController();
   final PostService _postService = PostService();
   final TextEditingController messageText = TextEditingController();
+  
 
+
+  
   @override
   void dispose() {
     _scrollController.dispose();
@@ -33,266 +36,323 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header section
-              Container(
-                padding: const EdgeInsets.only(top: 10, left: 23, right: 23, bottom: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppName.appname,
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/userprofile');
-                      },
-                      child: const UserAvatar(radius: 16,),
-                    )
-                  ],
-                ),
+        child: Column(
+          children: [
+            // 🔹 Header Section
+            Padding(
+              padding: const EdgeInsets.only(top: 10, left: 23, right: 23, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AppName.appname,
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, '/userprofile'),
+                    child: const UserAvatar(radius: 16),
+                  ),
+                ],
               ),
-              const Divider(color: messagecontainerColor),
+            ),
 
-              // Messages Stream
-              Expanded(
-                child: StreamBuilder(
-                  stream: _postService.getposts(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+            const Divider(color: messagecontainerColor),
 
-                    final docs = snapshot.data!.docs;
-
-                    // Scroll to bottom automatically on new messages
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (_scrollController.hasClients) {
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                        );
-                      }
-                    });
-
-                    return ListView.builder(
-                      controller: _scrollController,
-                      itemCount: docs.length,
-                      itemBuilder: (context, index) {
-                        final postDoc = docs[index];
-                        final post = docs[index].data() as Map<String, dynamic>;
-                        final username = post["username"] ?? "Unknown";
-                        final time = post["timestamp"] as Timestamp;
-                        final postId = postDoc.id;
-                        final text = post["text"] ?? "";
-                        final postUid = post["senderId"] ?? "";
-
-                        // 🗓 Show date separator if new date
-                        bool showdate = false;
-                        final currentDate = time.toDate();
-                        final formattedCurrent = DateFormat('dd-MM-yyyy').format(currentDate);
-                        if (index == 0) {
-                          showdate = true;
-                        } else {
-                          final prevPost = docs[index - 1].data() as Map<String, dynamic>;
-                          final prevTime = prevPost["timestamp"] as Timestamp;
-                          final prevDate = prevTime.toDate();
-                          final formattedPrev = DateFormat('dd-MM-yyyy').format(prevDate);
-                          if (formattedPrev != formattedCurrent) {
-                            showdate = true;
-                          }
+            //Messages Stream
+            Expanded(
+              child: Stack(
+                children: [
+                  Scrollbar(
+                    controller: _scrollController,
+                    thumbVisibility: true,
+                    thickness: 5,
+                    radius: const Radius.circular(20),
+                    child: StreamBuilder(
+                      stream: _postService.getposts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
                         }
-
-                        //  Show sender if different user or new day
-                        bool showsender = false;
-                        if (index == 0) {
-                          showsender = true;
-                        } else {
-                          final prevPost = docs[index - 1].data() as Map<String, dynamic>;
-                          final prevUid = prevPost["senderId"] ?? "";
-                          final prevTime = prevPost["timestamp"] as Timestamp;
-                          final prevDate = prevTime.toDate();
-                          final formattedPrev = DateFormat('dd-MM-yyyy').format(prevDate);
-                          if (prevUid != postUid || formattedPrev != formattedCurrent) {
-                            showsender = true;
-                          }
+                    
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              "No messages yet...",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
                         }
-
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 6, top: 2, left: 20, right: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (showdate)
-                                Container(
-                                  padding: const EdgeInsets.only(top: 10, bottom: 3),
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
-                                        color: messagecontainerColor,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Date(date: time),
-                                    ),
-                                  ),
-                                ),
-
-                              if (showsender)
-                                Container(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.only(top: 5, right: 10),
-                                        child:  StreamBuilder<bool>(
-                                                stream: PresenceServer().userOnlineStatus(postUid),
-                                                builder: (context, snapshot) {
-                                                  final isOnline = snapshot.data ?? false;
-                                                  return UserAvatar(isOnline: isOnline, radius: 16);
-                                                },
-                                                  ),
-
-                                      ),
-                                      Sendersname(sendersname: username),
-                                    ],
-                                  ),
-                                ),
-
-                              //  Message bubble
-                              Container(
-                                color: Colors.transparent,
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: GestureDetector(
-                                  onLongPress: () {
-                                    final homepagebackend = HomepageBackend();
-                                    homepagebackend.threedot(context, text, postId, postUid);
-                                  },
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Message(text: text),
-                                      Positioned(
-                                        right: 40,
-                                        bottom: 2,
-                                        child: Time(time: time),
-                                      ),
-                                      Positioned(
-                                        left: 50,
-                                        bottom: -20,
-                                        child: StreamBuilder<QuerySnapshot>(
-                                          stream: _postService.getreaction(postId),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                              return const SizedBox.shrink();
-                                            }
-                                            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                                              return const SizedBox.shrink();
-                                            }
-
-                                            final reactionsDocs = snapshot.data!.docs;
-                                            Map<String, int> reactionCounts = {};
-                                            for (var doc in reactionsDocs) {
-                                              final reactionData = doc.data() as Map<String, dynamic>;
-                                              final emoji = reactionData["emoji"] as String;
-                                              reactionCounts[emoji] = (reactionCounts[emoji] ?? 0) + 1;
-                                            }
-
-                                            final sortedReactions = reactionCounts.entries.toList()
-                                              ..sort((a, b) => b.value.compareTo(a.value));
-
-                                            final topTwo = sortedReactions.take(2).toList();
-                                            final otherCount = sortedReactions.skip(2)
-                                                .map((e) => e.value)
-                                                .fold(0, (sum, count) => sum + count);
-
-                                            Map<String, int> displayReactions = {};
-                                            for (var entry in topTwo) {
-                                              displayReactions[entry.key] = entry.value;
-                                            }
-                                            if (otherCount > 0) {
-                                              displayReactions["+"] = otherCount;
-                                            }
-
-                                            return Reaction(reactionCounts: displayReactions);
-                                          },
+                    
+                        final docs = snapshot.data!.docs;
+                    
+                        // Scroll to bottom after new messages
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (_scrollController.hasClients) {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                          }
+                        });
+                    
+                        return ListView.builder(
+                          controller: _scrollController,
+                          itemCount: docs.length,
+                          itemBuilder: (context, index) {
+                            final postDoc = docs[index];
+                            final post = postDoc.data() as Map<String, dynamic>;
+                            final username = post["username"] ?? "Unknown";
+                            final time = post["timestamp"] as Timestamp;
+                            final postId = postDoc.id;
+                            final text = post["text"] ?? "";
+                            final postUid = post["senderId"] ?? "";
+                    
+                            // Date Separator Logic
+                            bool showDate = false;
+                            final currentDate = time.toDate();
+                            final formattedCurrent =
+                                DateFormat('dd-MM-yyyy').format(currentDate);
+                    
+                            if (index == 0) {
+                              showDate = true;
+                            } else {
+                              final prevPost =
+                                  docs[index - 1].data() as Map<String, dynamic>;
+                              final prevTime = prevPost["timestamp"] as Timestamp;
+                              final prevDate = prevTime.toDate();
+                              final formattedPrev =
+                                  DateFormat('dd-MM-yyyy').format(prevDate);
+                              if (formattedPrev != formattedCurrent) {
+                                showDate = true;
+                              }
+                            }
+                    
+                            //  Sender Display Logic
+                            bool showSender = false;
+                            if (index == 0) {
+                              showSender = true;
+                            } else {
+                              final prevPost =
+                                  docs[index - 1].data() as Map<String, dynamic>;
+                              final prevUid = prevPost["senderId"] ?? "";
+                              final prevTime = prevPost["timestamp"] as Timestamp;
+                              final prevDate = prevTime.toDate();
+                              final formattedPrev =
+                                  DateFormat('dd-MM-yyyy').format(prevDate);
+                              if (prevUid != postUid ||
+                                  formattedPrev != formattedCurrent) {
+                                showSender = true;
+                              }
+                            }
+                    
+                            return Container(
+                              margin: const EdgeInsets.only(
+                                  bottom: 6, top: 2, left: 20, right: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (showDate)
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: 10, bottom: 3),
+                                      child: Center(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            color: messagecontainerColor,
+                                            borderRadius: BorderRadius.circular(6),
+                                          ),
+                                          child: Date(date: time),
                                         ),
                                       ),
-                                    ],
+                                    ),
+                    
+                                  if (showSender)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 5, right: 10),
+                                            child: StreamBuilder<bool>(
+                                              stream: PresenceServer()
+                                                  .userOnlineStatus(postUid),
+                                              builder: (context, snapshot) {
+                                                final isOnline =
+                                                    snapshot.data ?? false;
+                                                return UserAvatar(
+                                                    isOnline: isOnline, radius: 16);
+                                              },
+                                            ),
+                                          ),
+                                          Sendersname(sendersname: username),
+                                        ],
+                                      ),
+                                    ),
+                    
+                                  // Message bubble with reaction & time
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: GestureDetector(
+                                      onLongPress: () {
+                                        HomepageBackend().threedot(
+                                            context, text, postId, postUid);
+                                      },
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Message(text: text),
+                                          Positioned(
+                                            right: 40,
+                                            bottom: 2,
+                                            child: Time(time: time),
+                                          ),
+                                          Positioned(
+                                            left: 50,
+                                            bottom: -20,
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream:
+                                                  _postService.getreaction(postId),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const SizedBox.shrink();
+                                                }
+                    
+                                                if (!snapshot.hasData ||
+                                                    snapshot.data!.docs.isEmpty) {
+                                                  return const SizedBox.shrink();
+                                                }
+                    
+                                                final reactionsDocs =
+                                                    snapshot.data!.docs;
+                                                Map<String, int> reactionCounts = {};
+                    
+                                                for (var doc in reactionsDocs) {
+                                                  final data = doc.data()
+                                                      as Map<String, dynamic>;
+                                                  final emoji =
+                                                      data["emoji"] as String;
+                                                  reactionCounts[emoji] =
+                                                      (reactionCounts[emoji] ?? 0) +
+                                                          1;
+                                                }
+                    
+                                                final sorted = reactionCounts.entries
+                                                    .toList()
+                                                  ..sort((a, b) =>
+                                                      b.value.compareTo(a.value));
+                    
+                                                final topTwo =
+                                                    sorted.take(2).toList();
+                                                final otherCount = sorted
+                                                    .skip(2)
+                                                    .map((e) => e.value)
+                                                    .fold(0, (a, b) => a + b);
+                    
+                                                Map<String, int> display = {};
+                                                for (var entry in topTwo) {
+                                                  display[entry.key] = entry.value;
+                                                }
+                                                if (otherCount > 0) {
+                                                  display["+"] = otherCount;
+                                                }
+                    
+                                                return Reaction(
+                                                    reactionCounts: display);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
-              ),
-
-              //  Message Input
-              Container(
-                margin: const EdgeInsets.only(bottom: 3, top: 3),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: TextField(
-                        minLines: 1,
-                        maxLines: 2,
-                        keyboardType: TextInputType.multiline,
-                        controller: messageText,
-                        style: const TextStyle(color: textcolor),
-                        decoration: InputDecoration(
-                          hintText: TextNames.messagehint,
-                          filled: true,
-                          fillColor: messagecontainerColor,
-                          hintStyle: AppTextStyle.hint,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.only(left: 25, right: 25, bottom: 9),
-                        ),
-                      ),
                     ),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () async {
-                        final text = messageText.text.trim();
-                        final uid = authService.value.currentUser?.uid;
-                        if (text.isNotEmpty && uid != null) {
-                          await _postService.createPost(text);
-                          messageText.clear();
+                  ),
+             
+                   Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: (){
+                        if(_scrollController.hasClients){
+                          _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 20), curve: Curves.easeOut);
                         }
                       },
-                      child: Image.asset(
-                        "assets/images/forward.png",
-                        height: 40,
-                        width: 40,
+                      child: const CircleAvatar(
+                        backgroundColor: messagebackgroundColor,
+                                    child: Icon(
+                                      Icons.arrow_downward,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+
+            // Message Input
+            Container(
+              margin: const EdgeInsets.only(bottom: 3, top: 3),
+              child: Row(
+                children: [
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: TextField(
+                      minLines: 1,
+                      maxLines: 2,
+                      controller: messageText,
+                      keyboardType: TextInputType.multiline,
+                      style: const TextStyle(color: textcolor),
+                      decoration: InputDecoration(
+                        hintText: TextNames.messagehint,
+                        filled: true,
+                        fillColor: messagecontainerColor,
+                        hintStyle: AppTextStyle.hint,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.only(
+                            left: 25, right: 25, bottom: 9),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () async {
+                      final text = messageText.text.trim();
+                      final uid = authService.value.currentUser?.uid;
+
+                      if (text.isNotEmpty && uid != null) {
+                        await _postService.createPost(text);
+                        messageText.clear();
+                      }
+                    },
+                    child: Image.asset(
+                      "assets/images/forward.png",
+                      height: 40,
+                      width: 40,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

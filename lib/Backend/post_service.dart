@@ -70,6 +70,23 @@ Future<void> deletePost(String postId) async {
       return null;
     }
   }
+Stream<QuerySnapshot> getLatestPosts({int limit = 30}) {
+  return _firestore
+      .collection("posts")
+      .orderBy("timestamp", descending: true)
+      .limit(limit)
+      .snapshots();
+}
+
+Future<List<QueryDocumentSnapshot>> getOlderPosts(Timestamp lastTime, {int limit = 20}) async {
+  final query = await _firestore
+      .collection("posts")
+      .orderBy("timestamp", descending: true)
+      .startAfter([lastTime])
+      .limit(limit)
+      .get();
+  return query.docs;
+}
 
 
 }
