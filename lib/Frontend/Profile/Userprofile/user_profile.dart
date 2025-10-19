@@ -1,7 +1,6 @@
 import 'package:Privy/Backend/post_service.dart';
 import 'package:Privy/Backend/user_settings_backend.dart';
 import 'package:Privy/Frontend/Homepage/logos.dart';
-import 'package:Privy/Frontend/Homepage/message.dart';
 import 'package:Privy/Frontend/Profile/Userprofile/settingbuttons.dart';
 import 'package:Privy/Frontend/Things/color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

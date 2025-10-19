@@ -67,7 +67,7 @@ class Message extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             Linkify(
               text: text,
               onOpen: _onOpen,
