@@ -1,6 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Privy/AppName/app_name.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class Loadingpage extends StatefulWidget {
   const Loadingpage({super.key});
@@ -19,15 +24,26 @@ class _LoadingpageState extends State<Loadingpage> {
     if (!_hasChecked) {
       _hasChecked = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        _checkLogin();
+       _checkLoginAndConfig();
       });
     }
   }
 
-  Future<void> _checkLogin() async {
+  Future<void> _checkLoginAndConfig() async {
     final user = FirebaseAuth.instance.currentUser;
+    final remoteConfig = FirebaseRemoteConfig.instance;
 
-    // Add a short delay (optional, smoother transition)
+    await remoteConfig.setConfigSettings(
+      RemoteConfigSettings(fetchTimeout: Duration(seconds: 10),
+      minimumFetchInterval: Duration(seconds: 0),
+      ));
+    await remoteConfig.fetchAndActivate();
+
+    final showNewHomepage = remoteConfig.getBool('show_new_homepage');
+    final jsonString = remoteConfig.getString('homepage_config');
+    
+    final Map<String, dynamic> config = jsonString.isNotEmpty ? json.decode(jsonString) : {};
+
     await Future.delayed(const Duration(milliseconds: 800));
 
     if (!mounted) return; // make sure widget is still active
@@ -35,8 +51,9 @@ class _LoadingpageState extends State<Loadingpage> {
     if (user != null) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        '/homepage',
+        showNewHomepage ? '/homepagenew' : '/homepage',
         (Route<dynamic> route) => false,
+        arguments: config,
       );
     } else {
       Navigator.pushNamedAndRemoveUntil(

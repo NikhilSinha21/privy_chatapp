@@ -3,6 +3,7 @@ import 'package:Privy/Frontend/Authentication/loadingpage.dart';
 import 'package:Privy/Frontend/Authentication/login.dart';
 import 'package:Privy/Frontend/Authentication/registration.dart';
 import 'package:Privy/Frontend/Profile/Userprofile/user_profile.dart';
+import 'package:Privy/FrontendNewUpdates/homepage_new.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/homepage': (context) => const Homepage(),
         '/userprofile': (context) => const UserProfile(),
         '/userprofileupdataupdate': (context) => const UserProfileDataUpdate(),
+        '/homepagenew': (context) => const HomepageNew(),
       },
     );
   }
